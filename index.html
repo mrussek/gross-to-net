@@ -1,0 +1,115 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Gross to Net</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;600&family=IBM+Plex+Sans:wght@400;500;600&family=VT323&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+<div id="game">
+  <canvas id="screen" width="480" height="270"></canvas>
+
+  <div id="hud" class="hidden">
+    <div id="hud-left">
+      <div id="hud-chapter"></div>
+      <div id="hud-time"></div>
+      <div id="hud-objective"></div>
+    </div>
+    <div id="hud-right">
+      <button id="btn-phone" class="hud-btn hidden" title="Burner phone (P)">&#128241; <span>Phone</span><b id="phone-badge" class="badge hidden">0</b></button>
+      <button id="btn-journal" class="hud-btn" title="Case file (J)">&#128193; <span>Case File</span></button>
+      <button id="btn-sound" class="hud-btn" title="Toggle sound (M)">&#9835;</button>
+    </div>
+  </div>
+
+  <div id="dialog" class="hidden">
+    <canvas id="portrait" width="32" height="32"></canvas>
+    <div id="dialog-body">
+      <div id="dialog-name"></div>
+      <div id="dialog-text"></div>
+      <div id="dialog-choices"></div>
+      <div id="dialog-next">&#9660;</div>
+    </div>
+  </div>
+
+  <div id="toasts"></div>
+
+  <div id="phone" class="hidden">
+    <div class="phone-shell">
+      <div class="phone-top"><span class="phone-carrier">NO SIM &middot; WIFI</span><span id="phone-clock"></span></div>
+      <div class="phone-header"><div class="phone-avatar">L</div><div><b>LEDGER</b><small>unknown number &middot; end-to-end encrypted</small></div></div>
+      <div id="phone-thread"></div>
+      <div class="phone-foot">Messages auto-delete in 24h &middot; <kbd>P</kbd> / <kbd>Esc</kbd> to close</div>
+    </div>
+  </div>
+
+  <div id="journal" class="hidden">
+    <div class="journal-shell">
+      <div class="journal-head">
+        <h2>Case File</h2>
+        <span class="journal-sub">Privileged &amp; Confidential &mdash; Prepared at the Direction of Counsel</span>
+        <button class="close-x" data-close="journal">&times;</button>
+      </div>
+      <div class="journal-cols">
+        <ul id="journal-list"></ul>
+        <div id="journal-detail"></div>
+      </div>
+    </div>
+  </div>
+
+  <div id="modal" class="hidden">
+    <div class="wp-shell">
+      <div class="wp-head">
+        <div>
+          <div id="wp-ref"></div>
+          <h2 id="wp-title"></h2>
+        </div>
+        <div class="wp-head-btns">
+          <button class="wp-tool" id="wp-phone">&#128241; Messages</button>
+          <button class="close-x" id="wp-close" title="Close (Esc)">&times;</button>
+        </div>
+      </div>
+      <div id="wp-body"></div>
+    </div>
+  </div>
+
+  <div id="hearing" class="hidden"></div>
+
+  <div id="fade" class="hidden"><div id="fade-inner"></div></div>
+
+  <div id="title">
+    <div class="title-inner">
+      <div class="title-kicker">A forensic accounting thriller</div>
+      <h1>GROSS<span>&nbsp;TO&nbsp;</span>NET</h1>
+      <p class="title-blurb">Halvorsen Brands, Inc. &middot; $6.2B consumer packaged goods &middot; Q3 close.<br>Your predecessor left without notice. Someone left you a phone.</p>
+      <div class="title-form">
+        <label>Your name <input id="name-first" maxlength="14" value="Alex"> <input id="name-last" maxlength="16" value="Reyes"></label>
+      </div>
+      <div class="title-btns">
+        <button id="btn-new" class="big-btn">New Investigation</button>
+        <button id="btn-continue" class="big-btn ghost hidden">Continue</button>
+      </div>
+      <div class="title-help">
+        <div><kbd>WASD</kbd>/<kbd>&uarr;&darr;&larr;&rarr;</kbd> move &nbsp; <kbd>Shift</kbd> hurry &nbsp; <kbd>E</kbd>/<kbd>Space</kbd> talk &amp; inspect</div>
+        <div><kbd>P</kbd> phone &nbsp; <kbd>J</kbd> case file &nbsp; <kbd>M</kbd> sound &nbsp; <kbd>Esc</kbd> close</div>
+        <div class="title-note">Assumes working knowledge of US GAAP (ASC 606, ASC 250), SEC staff guidance, internal controls over financial reporting, and forensic data analytics. Calculators encouraged.</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script src="js/util.js"></script>
+<script src="js/maps.js"></script>
+<script src="js/render.js"></script>
+<script src="js/ui.js"></script>
+<script src="js/engine.js"></script>
+<script src="js/puzzles.js"></script>
+<script src="js/hearing.js"></script>
+<script src="js/story.js"></script>
+<script src="js/main.js"></script>
+</body>
+</html>
