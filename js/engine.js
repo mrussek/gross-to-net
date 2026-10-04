@@ -21,7 +21,10 @@
 
   E.resize = function () {
     const W = window.innerWidth, H = window.innerHeight;
-    const s = Math.max(2, Math.floor(Math.min(W / 400, H / 240)));
+    // Desktop: crisp integer zoom. Touch: fit ~17 tiles across the short side so phones aren't cramped.
+    const s = G.touch
+      ? Math.max(1, Math.min(W, H) / (17 * T))
+      : Math.max(2, Math.floor(Math.min(W / 400, H / 240)));
     E.viewW = Math.ceil(W / s); E.viewH = Math.ceil(H / s);
     canvas.width = E.viewW; canvas.height = E.viewH;
     canvas.style.width = E.viewW * s + 'px'; canvas.style.height = E.viewH * s + 'px';
@@ -169,14 +172,28 @@
     if (p.onDone) { const cb = p.onDone; p.onDone = null; cb(); }
 
     if (p.moving) {
-      if (stepToward(p, dt, E.run ? 7.5 : 4.6)) {
+      if (stepToward(p, dt, E.run ? 7.5 : E.autoPath ? 6 : 4.6)) {
         S.px = p.x; S.py = p.y;
         G.story.onStep(p.x, p.y);
       }
       return;
     }
-    if (E.scripted || G.ui.blocking()) return;
-    const dir = E.held[E.held.length - 1];
+    if (E.scripted || G.ui.blocking()) { E.autoPath = null; return; }
+    let dir = E.held[E.held.length - 1];
+    if (dir) E.autoPath = null;
+    else if (E.autoPath) {
+      // tap-to-move: follow the planned route, then face and use the target
+      if (!E.autoPath.length) {
+        const goal = E.autoGoal;
+        E.autoPath = null; E.autoGoal = null;
+        if (goal && goal.face) { p.dir = goal.face; S.dir = goal.face; if (goal.interact) E.interact(); }
+        return;
+      }
+      dir = E.autoPath[0];
+      const [dx, dy] = DIRS[dir];
+      if (E.blocked(p.x + dx, p.y + dy)) { E.autoPath = null; E.autoGoal = null; return; }
+      E.autoPath.shift();
+    }
     if (dir) {
       p.dir = dir; S.dir = dir;
       const [dx, dy] = DIRS[dir];
@@ -237,6 +254,7 @@
     cy = mh <= H ? (mh - H) / 2 : Math.max(0, Math.min(mh - H, cy));
     if (E.shake > 0) { cx += (Math.random() - 0.5) * E.shake; cy += (Math.random() - 0.5) * E.shake; E.shake *= 0.9; if (E.shake < 0.3) E.shake = 0; }
     cx = Math.round(cx); cy = Math.round(cy);
+    E.cam = { x: cx, y: cy };
 
     ctx.save();
     ctx.translate(-cx, -cy);
@@ -273,6 +291,12 @@
         }
       }
     }
+    if (E.tapMark && E.time - E.tapMark.t < 0.6) {
+      const k = (E.time - E.tapMark.t) / 0.6;
+      ctx.strokeStyle = E.tapMark.ok ? 'rgba(240,200,80,' + (1 - k) + ')' : 'rgba(212,87,78,' + (1 - k) + ')';
+      ctx.lineWidth = 1;
+      ctx.beginPath(); ctx.arc(E.tapMark.x * T + 8, E.tapMark.y * T + 8, 3 + k * 6, 0, Math.PI * 2); ctx.stroke();
+    }
     ctx.restore();
 
     if (m.dark || S.night) drawDarkness(m, cx, cy);
@@ -308,6 +332,69 @@
     }
     ctx.drawImage(darkCanvas, 0, 0);
   }
+
+  // ---------------------------------------------------------------- tap / click to move
+  // Plan a route to the tapped tile. Tapping a person or object walks to a tile facing it and uses it.
+  E.tapAt = function (tx, ty, actorTy) {
+    const m = E.map(), p = E.player;
+    if (!m.inside(tx, ty)) return;
+    const sx = p.moving ? p.nx : p.x, sy = p.moving ? p.ny : p.y;
+    const goals = new Map();
+    const actor = E.actorAt(tx, actorTy) || E.actorAt(tx, ty);
+    const ax = tx, ay = actor ? actor.y : ty;
+    const id = m.interact[tx + ',' + ty];
+    const o = m.obj[ty][tx];
+    if (actor || id || (o && m.solid(tx, ty))) {
+      for (const d in DIRS) {
+        const [dx, dy] = DIRS[d];
+        goals.set((ax - dx) + ',' + (ay - dy), { face: d, interact: true });
+        // talk across a desk or counter
+        const mid = m.inside(ax - dx, ay - dy) ? m.obj[ay - dy][ax - dx] : null;
+        if (actor && mid && 'DCrTK'.includes(mid)) {
+          const k = (ax - 2 * dx) + ',' + (ay - 2 * dy);
+          if (!goals.has(k)) goals.set(k, { face: d, interact: true });
+        }
+      }
+    } else if (!m.solid(tx, ty)) {
+      goals.set(tx + ',' + ty, null);
+    } else { E.tapMark = { x: tx, y: ty, t: E.time, ok: false }; return; }
+
+    // BFS over walkable tiles
+    const start = sx + ',' + sy;
+    const prev = new Map([[start, null]]);
+    const q = [[sx, sy]];
+    let found = goals.has(start) ? start : null;
+    while (q.length && !found) {
+      const [x, y] = q.shift();
+      for (const d in DIRS) {
+        const [dx, dy] = DIRS[d];
+        const nx = x + dx, ny = y + dy, k = nx + ',' + ny;
+        if (prev.has(k) || E.blocked(nx, ny)) continue;
+        prev.set(k, [x + ',' + y, d]);
+        if (goals.has(k)) { found = k; break; }
+        q.push([nx, ny]);
+      }
+    }
+    if (!found) { E.tapMark = { x: tx, y: ty, t: E.time, ok: false }; return; }
+    const path = [];
+    for (let k = found; prev.get(k); k = prev.get(k)[0]) path.unshift(prev.get(k)[1]);
+    E.held = [];
+    E.autoPath = path;
+    E.autoGoal = goals.get(found);
+    E.tapMark = { x: tx, y: ty, t: E.time, ok: true };
+  };
+
+  canvas.addEventListener('pointerdown', e => {
+    if (!G.started || !G.state) return;
+    G.audio.init();
+    if (G.ui.dialogOpen) { if (G.ui._advance && !G.ui._choice) G.ui._advance(); return; }
+    if (E.scripted || G.ui.blocking() || !E.cam) return;
+    const r = canvas.getBoundingClientRect();
+    const gx = (e.clientX - r.left) * (canvas.width / r.width) + E.cam.x;
+    const gy = (e.clientY - r.top) * (canvas.height / r.height) + E.cam.y;
+    // sprites are drawn 4px above their tile, so look a little lower for people
+    E.tapAt(Math.floor(gx / T), Math.floor(gy / T), Math.floor((gy + 4) / T));
+  });
 
   // ---------------------------------------------------------------- input
   const KEYMAP = { ArrowUp: 'up', ArrowDown: 'down', ArrowLeft: 'left', ArrowRight: 'right', w: 'up', s: 'down', a: 'left', d: 'right', W: 'up', S: 'down', A: 'left', D: 'right' };

@@ -217,7 +217,7 @@
         (day ? '<div class="card-day">' + U.esc(day) + '</div>' : '') +
         (title ? '<div class="card-title">' + U.esc(title) + '</div>' : '') +
         (text ? '<div class="card-text">' + U.rich(text) + '</div>' : '') +
-        (wait ? '<div class="card-hint">press space to continue</div>' : ''));
+        (wait ? '<div class="card-hint">' + (G.touch ? 'tap to continue' : 'press space to continue') + '</div>' : ''));
       G.audio.sting();
       if (!wait) { resolve(); return; }
       const go = () => {

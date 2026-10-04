@@ -1,6 +1,10 @@
 // Shared namespace + small helpers (no modules so index.html works from file://).
 window.G = window.G || {};
 
+// Touch-first device (phone/tablet)? Also flipped on at the first real touch, see main.js.
+G.touch = !!(window.matchMedia && window.matchMedia('(pointer: coarse)').matches);
+document.documentElement.classList.toggle('touch', G.touch);
+
 G.util = {
   // Deterministic hash -> [0,1) for per-tile texture variation.
   hash(x, y, s = 0) {

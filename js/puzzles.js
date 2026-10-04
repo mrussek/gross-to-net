@@ -140,7 +140,7 @@
       key, q,
       render(el, api) {
         const row = U.el('div');
-        const inp = U.el('input', { type: 'text', placeholder, autocomplete: 'off', spellcheck: 'false' });
+        const inp = U.el('input', { type: 'text', inputmode: 'decimal', placeholder, autocomplete: 'off', spellcheck: 'false' });
         const btn = U.el('button', { class: 'submit' }, 'Tie out');
         row.appendChild(inp);
         if (suffix) row.appendChild(U.el('span', { style: 'margin-left:6px;font-family:var(--mono)' }, suffix));
@@ -156,7 +156,7 @@
         };
         btn.addEventListener('click', go);
         inp.addEventListener('keydown', e => { e.stopPropagation(); if (e.key === 'Enter') go(); });
-        setTimeout(() => inp.focus(), 100);
+        if (!G.touch) setTimeout(() => inp.focus(), 100);
       },
     }, extra);
   }

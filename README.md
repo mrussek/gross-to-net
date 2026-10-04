@@ -8,6 +8,8 @@ Open `index.html` in a browser. There's no build step and no dependencies.
 
 **Controls:** WASD or arrow keys to move · Shift to hurry · E or Space to talk and inspect · P for the phone · J for the case file · M to mute · Esc to close.
 
+**Touch and mouse:** tap or click where you want to walk; tap a person or object to walk over and interact. Phones and tablets are detected automatically and get a zoom level and layout sized for small screens. Landscape gives the most room.
+
 Progress autosaves to `localStorage`.
 
 ## How it plays

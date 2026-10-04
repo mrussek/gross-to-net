@@ -83,6 +83,12 @@
     G.engine.keyDown(e);
   });
   document.addEventListener('keyup', e => G.engine.keyUp(e));
+  window.addEventListener('touchstart', () => {
+    if (G.touch) return;
+    G.touch = true;
+    document.documentElement.classList.add('touch');
+    G.engine.resize();
+  }, { passive: true });
 
   G.engine.init();
 })();

@@ -942,7 +942,7 @@
       await text('You found it. Good. I can’t talk to you in the building, so this is how we do it.');
       await text('Martin was close. He found something in the trade accrual and they made him go away. Start where he stopped: account 2410. His rec is still on your desktop.');
       await text('I’ll be watching. When you’re stuck, I’ll help. When you’re *really* stuck, I’ll stop being subtle.');
-      await narrate('(Press *P* to read the phone. Press *J* to open your case file.)');
+      await narrate(G.touch ? '(Tap *Phone* at the top of the screen to read messages, and *Case File* to review your evidence.)' : '(Press *P* to read the phone. Press *J* to open your case file.)');
       return;
     }
     if (ch === 0) {
