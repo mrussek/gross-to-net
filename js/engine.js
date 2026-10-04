@@ -234,7 +234,7 @@
     if (a && !a.path.length) return { actor: a };
     // talk across desks / counters
     const o = m.inside(tx, ty) ? m.obj[ty][tx] : null;
-    if (o && 'DCrTK'.includes(o)) {
+    if (o && 'DCrTKq'.includes(o)) {
       const b = E.actorAt(tx + dx, ty + dy);
       if (b && !b.path.length) return { actor: b };
     }
@@ -381,7 +381,7 @@
         goals.set((ax - dx) + ',' + (ay - dy), { face: d, interact: true });
         // talk across a desk or counter
         const mid = m.inside(ax - dx, ay - dy) ? m.obj[ay - dy][ax - dx] : null;
-        if (actor && mid && 'DCrTK'.includes(mid)) {
+        if (actor && mid && 'DCrTKq'.includes(mid)) {
           const k = (ax - 2 * dx) + ',' + (ay - 2 * dy);
           if (!goals.has(k)) goals.set(k, { face: d, interact: true });
         }

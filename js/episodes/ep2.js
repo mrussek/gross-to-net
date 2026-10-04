@@ -65,7 +65,7 @@
     m.put(26, 10, 'w', 'cooler'); m.put(1, 10, 'P'); m.put(48, 10, 'P');
     m.put(28, 12, 's', 'safety_sign'); m.label(28, 12, '212 DAYS SAFE');
     // locker room
-    m.row(1, 7, 13, 'l', 'lockers'); m.put(3, 13, 'l', 'my_locker');
+    m.row(1, 3, 13, 'l', 'lockers'); m.row(5, 7, 13, 'l', 'lockers'); m.put(3, 13, 'l', 'my_locker');
     m.row(3, 5, 16, 'T', 'locker_bench'); m.put(8, 18, 'Q', 'vending'); m.put(1, 21, 'P');
     // production lines
     const line = (y, down) => {

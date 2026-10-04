@@ -127,6 +127,7 @@
   // ---------------------------------------------------------------- phone
   ui.text = function (text, opts = {}) {
     const S = G.state;
+    text = text.replace(/\{first\}/g, G.state.firstName).replace(/\{last\}/g, G.state.lastName);
     const msg = { text, tier: opts.tier || 0, time: G.story.clock(), me: !!opts.me };
     S.messages.push(msg);
     if (!opts.me) {

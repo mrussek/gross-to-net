@@ -257,7 +257,7 @@
       case 'dunmore': return ch === 5 ? p(38, 6, 'up') : (ch === 0 || ch === 2) ? p(16, 5, 'left') : null;
       case 'lucia':
         if (ch === 3) return s.map === 'mirador' ? { map: 'mirador', x: 15, y: 9, dir: 'down' } : null;
-        if (ch === 5) return p(22, 10, 'down');
+        if (ch === 5) return p(25, 11, 'up');
         return p(17, 16, 'up');
       case 'diego': return ch !== 3 && ch !== 5 ? p(3, 16, 'up') : null;
       case 'marisela': return ch !== 3 ? p(21, 2, 'down') : null;

@@ -78,7 +78,7 @@
     for (let y = 14; y <= 18; y++) m.put(46, y, 'S', 'servers');
     m.put(40, 15, 'C', 'sam_pc'); m.put(41, 15, 'D'); m.put(39, 20, 'F', 'hold_files');
     // treasury
-    m.put(3, 25, 'D', 'ben_desk'); m.put(4, 25, 'C', 'ben_pc'); m.put(5, 25, 'D', 'ben_desk'); m.put(4, 24, 'h');
+    m.put(3, 26, 'D', 'ben_desk'); m.put(4, 26, 'C', 'ben_pc'); m.put(5, 26, 'D', 'ben_desk'); m.put(4, 27, 'h');
     m.put(8, 28, 'F', 'treasury_files'); m.put(1, 28, 'P');
     // war room
     m.put(12, 25, 'C', 'war_pc'); m.put(13, 25, 'D', 'war_desk'); m.put(11, 25, 'D', 'swag'); m.put(12, 26, 'h');
@@ -86,7 +86,7 @@
     // studio, lounge, records
     m.put(20, 26, 'T', 'studio'); m.put(21, 26, 'T', 'studio'); m.put(24, 24, 'P');
     m.put(28, 26, 'c', 'lounge_couch'); m.put(29, 26, 'c', 'lounge_couch'); m.put(33, 26, 'T', 'pool'); m.put(34, 26, 'T', 'pool'); m.put(37, 24, 'G', 'lounge_cooler');
-    m.row(40, 45, 24, 'F', 'records'); m.row(40, 45, 27, 'F', 'records');
+    m.row(40, 41, 24, 'F', 'records'); m.row(43, 45, 24, 'F', 'records'); m.row(40, 45, 27, 'F', 'records');
     return m;
   }
 
@@ -294,7 +294,7 @@
         if (ch === 4) return f.mari_met && s.map !== 'park' ? null : { map: 'park', x: 14, y: 12, dir: 'up' };
         if (ch === 5) return p(22, 10, 'down');
         return day ? p(18, 16, 'up') : null;
-      case 'ben': return day && ch !== 5 ? p(4, 24, 'down') : null;
+      case 'ben': return day && ch !== 5 ? p(4, 27, 'up') : null;
       case 'darnell': return ch === 2 ? { map: 'dc', x: 34, y: 25, dir: 'up' } : null;
       case 'rudy': return ch === 2 ? { map: 'dc', x: 3, y: 25, dir: 'right' } : null;
       case 'driver': return ch === 2 && !f.darnell_flipped ? { map: 'dc', x: 22, y: 10, dir: 'left' } : null;
