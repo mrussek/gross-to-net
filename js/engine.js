@@ -31,15 +31,21 @@
     ctx.imageSmoothingEnabled = false;
   };
 
-  E.init = function () {
+  // Called whenever an episode is loaded: pre-render that episode's maps.
+  E.loadMaps = function () {
+    E.mapCanvas = {};
+    E.actors = [];
     for (const k in G.maps) E.mapCanvas[k] = G.render.prerender(G.maps[k]);
+  };
+
+  E.init = function () {
     E.resize();
     window.addEventListener('resize', E.resize);
     let last = performance.now();
     const loop = now => {
       const dt = Math.min(0.05, (now - last) / 1000); last = now;
       E.time += dt;
-      if (G.state) { E.update(dt); E.draw(); }
+      if (G.state && G.maps && G.maps[G.state.map]) { E.update(dt); E.draw(); }
       requestAnimationFrame(loop);
     };
     requestAnimationFrame(loop);
@@ -299,8 +305,32 @@
     }
     ctx.restore();
 
+    if (m.weather === 'frost') drawFrost();
     if (m.dark || S.night) drawDarkness(m, cx, cy);
+    if (m.weather === 'snow') drawSnow(cx, cy);
   };
+
+  // falling snow in world space so it drifts past as the camera moves
+  const flakes = Array.from({ length: 140 }, (_, i) => ({ x: Math.random() * 2000, y: Math.random() * 2000, s: 0.5 + Math.random() * 1.2, d: Math.random() * 6 }));
+  function drawSnow(cx, cy) {
+    const W = E.viewW, H = E.viewH;
+    ctx.fillStyle = 'rgba(240,246,252,0.85)';
+    for (const f of flakes) {
+      const x = ((f.x + E.time * 14 * f.s + Math.sin(E.time + f.d) * 6 - cx * 0.6) % W + W) % W;
+      const y = ((f.y + E.time * 26 * f.s - cy * 0.6) % H + H) % H;
+      ctx.fillRect(x | 0, y | 0, f.s > 1.1 ? 2 : 1, f.s > 1.1 ? 2 : 1);
+    }
+  }
+  function drawFrost() {
+    const W = E.viewW, H = E.viewH;
+    ctx.fillStyle = 'rgba(170,205,235,0.10)';
+    ctx.fillRect(0, 0, W, H);
+    ctx.fillStyle = 'rgba(235,245,255,0.07)';
+    for (let i = 0; i < 6; i++) {
+      const x = ((i * 97 + E.time * (6 + i)) % (W + 120)) - 60, y = (i * 53) % H;
+      ctx.beginPath(); ctx.ellipse(x, y, 70, 18, 0, 0, Math.PI * 2); ctx.fill();
+    }
+  }
 
   const darkCanvas = document.createElement('canvas');
   function drawDarkness(m, cx, cy) {
@@ -309,7 +339,7 @@
     const d = darkCanvas.getContext('2d');
     d.globalCompositeOperation = 'source-over';
     d.clearRect(0, 0, W, H);
-    d.fillStyle = m.name === 'garage' ? 'rgba(4,6,12,0.86)' : 'rgba(6,10,26,0.80)';
+    d.fillStyle = 'rgba(' + (m.darkTint || '6,10,26') + ',' + (m.darkness || 0.8) + ')';
     d.fillRect(0, 0, W, H);
     d.globalCompositeOperation = 'destination-out';
     const hole = (x, y, r, a = 1) => {
@@ -319,7 +349,7 @@
     };
     const p = E.player;
     hole(p.fx * T + 8 - cx, p.fy * T + 4 - cy, 60, 0.95);
-    const lights = m.name === 'garage' ? m.lights : G.story.nightLights();
+    const lights = (m.lights || []).concat(G.story.nightLights ? G.story.nightLights(m.name) : []);
     for (const l of lights) {
       let a = 0.9;
       if (l.flicker) a = (Math.sin(E.time * 23) + Math.sin(E.time * 7.3)) > 1.2 ? 0.2 : 0.85;
@@ -328,7 +358,8 @@
     for (const pr of m.props) if (pr.lightsOn) {
       const fx = pr.x * T + pr.w * T / 2 - cx;
       const fy = pr.facing === 'right' ? pr.y * T + 8 - cy : pr.y * T - cy;
-      hole(fx + (pr.facing === 'right' ? 40 : 0), fy + 12, 70, 1);
+      const off = { right: [40, 0], left: [-40, 0], up: [0, -40], down: [0, 40] }[pr.facing] || [0, 0];
+      hole(fx + off[0], fy + 12 + off[1], 70, 1);
     }
     ctx.drawImage(darkCanvas, 0, 0);
   }

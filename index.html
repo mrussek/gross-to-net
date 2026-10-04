@@ -25,6 +25,7 @@
       <button id="btn-phone" class="hud-btn hidden" title="Burner phone (P)">&#128241; <span>Phone</span><b id="phone-badge" class="badge hidden">0</b></button>
       <button id="btn-journal" class="hud-btn" title="Case file (J)">&#128193; <span>Case File</span></button>
       <button id="btn-sound" class="hud-btn" title="Toggle sound (M)">&#9835;</button>
+      <button id="btn-menu" class="hud-btn" title="Episode select (progress is saved)">&#9776;</button>
     </div>
   </div>
 
@@ -87,14 +88,11 @@
     <div class="title-inner">
       <div class="title-kicker">A forensic accounting thriller</div>
       <h1>GROSS<span>&nbsp;TO&nbsp;</span>NET</h1>
-      <p class="title-blurb">Halvorsen Brands, Inc. &middot; $6.2B consumer packaged goods &middot; Q3 close.<br>Your predecessor left without notice. Someone left you a phone.</p>
+      <p class="title-blurb">Five cases. Five companies. One trail of money that never quite adds up.</p>
       <div class="title-form">
         <label>Your name <input id="name-first" maxlength="14" value="Alex"> <input id="name-last" maxlength="16" value="Reyes"></label>
       </div>
-      <div class="title-btns">
-        <button id="btn-new" class="big-btn">New Investigation</button>
-        <button id="btn-continue" class="big-btn ghost hidden">Continue</button>
-      </div>
+      <div id="episode-list"></div>
       <div class="title-help">
         <div class="touch-only">Tap where you want to walk. Tap people and objects to talk or inspect.<br>Tap the dialogue box to continue. Landscape gives you more room.</div>
         <div class="no-touch"><kbd>WASD</kbd>/<kbd>&uarr;&darr;&larr;&rarr;</kbd> move &nbsp; <kbd>Shift</kbd> hurry &nbsp; <kbd>E</kbd>/<kbd>Space</kbd> talk &amp; inspect</div>
@@ -106,13 +104,18 @@
 </div>
 
 <script src="js/util.js"></script>
-<script src="js/maps.js"></script>
+<script src="js/mapkit.js"></script>
 <script src="js/render.js"></script>
 <script src="js/ui.js"></script>
 <script src="js/engine.js"></script>
 <script src="js/puzzles.js"></script>
 <script src="js/hearing.js"></script>
-<script src="js/story.js"></script>
+<script src="js/kit.js"></script>
+<script src="js/episodes/ep1.js"></script>
+<script src="js/episodes/ep2.js"></script>
+<script src="js/episodes/ep3.js"></script>
+<script src="js/episodes/ep4.js"></script>
+<script src="js/episodes/ep5.js"></script>
 <script src="js/main.js"></script>
 </body>
 </html>

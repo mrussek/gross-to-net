@@ -295,3 +295,26 @@ body { touch-action: manipulation; }
   .ending .stats { gap: 6px; }
   .ending .stat b { font-size: 24px; }
 }
+
+/* criteria checklist step */
+.crit { display: flex; flex-direction: column; gap: 8px; }
+.crit-row { display: flex; gap: 12px; align-items: center; justify-content: space-between; background: #f6f4ec; border: 1px solid #e0dac6; border-radius: 4px; padding: 8px 10px; }
+.crit-t { flex: 1; font-size: 13.5px; line-height: 1.4; }
+.crit-btns { display: flex; gap: 6px; flex: none; }
+.qbox .opt.crit-b { padding: 6px 12px; font-size: 13px; }
+.qbox .opt.sel { border-color: #1f3a2e; background: #dfe9da; font-weight: 600; }
+@media (max-width: 600px) { .crit-row { flex-direction: column; align-items: stretch; } }
+
+/* episode select */
+#title { overflow-y: auto; align-items: flex-start; }
+.title-inner { margin: auto 0; padding: 24px 0; }
+#episode-list { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 10px; text-align: left; margin-top: 8px; }
+.ep-card { background: rgba(12,16,24,.85); border: 1px solid #2f3a4a; border-radius: 8px; padding: 12px 14px; display: flex; flex-direction: column; gap: 6px; }
+.ep-card.solved { border-color: #3a6a50; }
+.ep-num { font-family: var(--mono); font-size: 11px; letter-spacing: 2px; color: var(--accent-2); }
+.ep-title { font-family: var(--pixel); font-size: 28px; line-height: .95; color: var(--ink); }
+.ep-sub { font-size: 12.5px; color: var(--muted); line-height: 1.4; flex: 1; }
+.ep-status { font-size: 12px; color: var(--accent); font-family: var(--mono); }
+.ep-btns { display: flex; gap: 6px; margin-top: 4px; }
+.ep-btns button { flex: 1; padding: 8px 10px; font-size: 14px; }
+.ep-btns .ghost { flex: 0 0 auto; }

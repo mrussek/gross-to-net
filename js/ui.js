@@ -133,7 +133,7 @@
       G.audio.buzz();
       // already reading the thread: no badge, no duplicate pop-up
       if (!ui.phoneOpen) S.unread = (S.unread || 0) + 1;
-      if (!ui.phoneOpen) ui.toast('LEDGER', text.length > 140 ? text.slice(0, 137) + '…' : text, opts.tier ? 'hint' : '', () => ui.openPhone());
+      if (!ui.phoneOpen) ui.toast(G.ep.contact.name, text.length > 140 ? text.slice(0, 137) + '…' : text, opts.tier ? 'hint' : '', () => ui.openPhone());
     }
     ui.renderPhone();
     ui.updateHud();
@@ -152,6 +152,15 @@
     }
     th.scrollTop = th.scrollHeight;
     $('phone-clock').textContent = G.story.clock();
+  };
+
+  // Phone header shows the current episode's whistleblower.
+  ui.setContact = function (c) {
+    document.querySelector('.phone-avatar').textContent = c.avatar;
+    document.querySelector('.phone-header b').textContent = c.name;
+    document.querySelector('.phone-header small').textContent = c.sub;
+    document.querySelector('.phone-avatar').style.borderColor = c.color || '';
+    document.querySelector('.phone-avatar').style.color = c.color || '';
   };
 
   ui.openPhone = function () {
@@ -254,7 +263,7 @@
     const S = G.state;
     const ch = G.story.chapterInfo();
     $('hud-chapter').textContent = ch.title;
-    $('hud-time').textContent = G.story.clock() + '  ·  Halvorsen Brands HQ, ' + (S.map === 'garage' ? 'Garage P2' : 'Floor 14');
+    $('hud-time').textContent = G.story.clock() + '  ·  ' + G.story.location();
     const obj = G.story.objective();
     $('hud-objective').innerHTML = U.rich(obj.text);
     $('btn-phone').classList.toggle('hidden', !S.flags.phone_found);
