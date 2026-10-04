@@ -1,7 +1,7 @@
 // Map construction toolkit. Each map has a floor layer (terrain/walls) and an object layer (furniture).
 // Episodes build their own maps from these primitives so room geometry stays consistent.
 (function () {
-  const SOLID_FLOOR = new Set(['#', 'W', 'g', '!']);
+  const SOLID_FLOOR = new Set(['#', 'W', 'g', '!', '&']);
   const SOLID_OBJ = new Set(['D', 'C', 'T', 'F', 'B', 'P', 'S', 'K', 'M', 'R', 'w', 'c', 'X', 'Y', 'E', 'r', 'Q', 'O',
     'H', 'j', 'f', 'v', 'n', 'l', 'G', 'I', 'o', 'e', 'u', 'q', 'y']);
 

@@ -97,6 +97,15 @@
         if (m.lanes && m.lanes.has(tx + ',' + ty)) px(c, x + 6, y + 3, 4, 10, '#d8c24a');
         break;
       }
+      case '&': { // city lights far below a lookout
+        px(c, x, y, T, T, '#0a0e1c');
+        for (let i = 0; i < 7; i++) {
+          const k = H(tx, ty, i + 40);
+          if (k < 0.75) px(c, x + ((H(tx, ty, i + 50) * 15) | 0), y + ((H(tx, ty, i + 60) * 15) | 0), 1, 1, k < 0.2 ? '#f4f1e8' : k < 0.5 ? '#f0c850' : '#e08a3c');
+        }
+        if (H(tx, ty, 9) < 0.08) px(c, x + 3, y + 7, 9, 1, '#c94a3a');
+        break;
+      }
       case '"': { // grass / dirt
         px(c, x, y, T, T, ['#4a6b3a', '#46663a', '#4e7040'][(v * 3) | 0]);
         for (let i = 0; i < 6; i++) px(c, x + ((H(tx, ty, i + 3) * 16) | 0), y + ((H(tx, ty, i + 13) * 16) | 0), 1, 2, '#5d8248');
