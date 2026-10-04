@@ -84,7 +84,11 @@
       case '*': { // snow
         px(c, x, y, T, T, ['#e9eef3', '#e2e8ee', '#eef2f6'][(v * 3) | 0]);
         for (let i = 0; i < 3; i++) px(c, x + ((H(tx, ty, i + 21) * 15) | 0), y + ((H(tx, ty, i + 27) * 15) | 0), 2, 1, '#cfd8e2');
-        if (m.ruts && m.ruts.has(tx + ',' + ty)) { px(c, x + 3, y, 3, T, '#a9b1ba'); px(c, x + 10, y, 3, T, '#a9b1ba'); }
+        if (m.ruts && m.ruts.has(tx + ',' + ty)) {
+          const horiz = m.ruts.has((tx - 1) + ',' + ty) || m.ruts.has((tx + 1) + ',' + ty);
+          if (horiz) { px(c, x, y + 3, T, 3, '#b4bcc6'); px(c, x, y + 10, T, 3, '#b4bcc6'); }
+          else { px(c, x + 3, y, 3, T, '#b4bcc6'); px(c, x + 10, y, 3, T, '#b4bcc6'); }
+        }
         break;
       }
       case '%': { // asphalt
@@ -333,7 +337,7 @@
         } else { px(c, x + 2, y + 12, 12, 2, '#9a7a4a'); }
         if (frost) { px(c, x, y - 8, T, 1, '#e8f2fa'); px(c, x, y + 3, T, 1, '#e8f2fa'); }
         const rl = m.labels && m.labels[tx + ',' + ty];
-        if (rl) { const w = textWidth(rl) + 2; px(c, x + 8 - w / 2, y + 7, w, 7, '#f4f1e8'); drawText(c, rl, x + 9 - w / 2, y + 8, '#1f2328'); }
+        if (rl) { const w = textWidth(rl) + 4; px(c, x + 8 - w / 2, y + 6, w, 9, '#1f2328'); px(c, x + 9 - w / 2, y + 7, w - 2, 7, '#f0c850'); drawText(c, rl, x + 10 - w / 2, y + 8, '#1f2328'); }
         break;
       }
       case 'j': { // shrink-wrapped pallet
@@ -464,7 +468,7 @@
           px(c, x + 3, cy + 1, w - 6, cab - 2, p.cab || '#8a2a2a'); px(c, x + 5, cy + (p.facing === 'up' ? 3 : cab - 9), w - 10, 6, '#1c2a36');
           px(c, x + 4, cy + (p.facing === 'up' ? 0 : cab - 2), 3, 2, p.lightsOn ? '#fff7c0' : '#d8d2b0'); px(c, x + w - 7, cy + (p.facing === 'up' ? 0 : cab - 2), 3, 2, p.lightsOn ? '#fff7c0' : '#d8d2b0');
         }
-        if (p.label) drawText(c, p.label, x + 4, ty0 + 6, '#1f2328');
+        if (p.label) drawText(c, p.label, x + 6, ty0 + 6, '#1f2328');
         if (p.snowy) { px(c, x + 1, ty0, w - 2, 4, '#f4f7fa'); }
       } else {
         const tx0 = p.facing === 'left' ? x + cab : x;
