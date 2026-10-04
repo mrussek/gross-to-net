@@ -130,9 +130,10 @@
     const msg = { text, tier: opts.tier || 0, time: G.story.clock(), me: !!opts.me };
     S.messages.push(msg);
     if (!opts.me) {
-      S.unread = (S.unread || 0) + 1;
       G.audio.buzz();
-      ui.toast('LEDGER', text.length > 140 ? text.slice(0, 137) + '…' : text, opts.tier ? 'hint' : '', () => ui.openPhone());
+      // already reading the thread: no badge, no duplicate pop-up
+      if (!ui.phoneOpen) S.unread = (S.unread || 0) + 1;
+      if (!ui.phoneOpen) ui.toast('LEDGER', text.length > 140 ? text.slice(0, 137) + '…' : text, opts.tier ? 'hint' : '', () => ui.openPhone());
     }
     ui.renderPhone();
     ui.updateHud();
@@ -164,6 +165,7 @@
   ui.closePhone = function () { ui.phoneOpen = false; $('phone').classList.add('hidden'); };
   ui.togglePhone = () => (ui.phoneOpen ? ui.closePhone() : ui.openPhone());
   $('phone').addEventListener('click', e => { if (e.target.id === 'phone') ui.closePhone(); });
+  $('phone-close').addEventListener('click', () => ui.closePhone());
 
   // ---------------------------------------------------------------- toasts
   ui.toast = function (title, text, kind = '', onClick) {

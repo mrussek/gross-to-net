@@ -75,6 +75,9 @@ kbd { font-family: var(--mono); font-size: 0.8em; padding: 1px 5px; border: 1px 
 .phone-header { display: flex; gap: 10px; align-items: center; padding: 8px 16px 12px; border-bottom: 1px solid #1d232b; }
 .phone-header b { display: block; font-size: 15px; }
 .phone-header small { color: #7d8794; font-size: 11px; }
+.phone-close { color: #c9d1da; flex: none; }
+.phone-foot .no-touch { display: inline; }
+.touch .phone-foot .no-touch { display: none; }
 .phone-avatar { width: 36px; height: 36px; border-radius: 50%; background: #233; border: 1px solid #3d5; color: #7fe0a8; display: flex; align-items: center; justify-content: center; font-family: var(--pixel); font-size: 22px; }
 #phone-thread { flex: 1; overflow-y: auto; padding: 14px; display: flex; flex-direction: column; gap: 8px; }
 .msg { max-width: 86%; background: #1a222c; border-radius: 14px 14px 14px 4px; padding: 8px 12px; font-size: 14px; line-height: 1.42; white-space: pre-wrap; }
@@ -266,11 +269,13 @@ body { touch-action: manipulation; }
   #dialog-text { font-size: 14.5px; min-height: 0; }
   #dialog-choices button { font-size: 13.5px; }
 
-  #toasts { top: calc(env(safe-area-inset-top) + 74px); right: 8px; width: calc(100vw - 16px); }
+  /* sit below overlay headers so pop-ups never cover a close button */
+  #toasts { top: calc(env(safe-area-inset-top) + 132px); right: 8px; width: calc(100vw - 16px); }
   #toasts .toast:not(:last-child) { display: none; }
 
   #phone { padding: 0; justify-content: center; }
-  .phone-shell { margin: 0; width: 100%; height: 100%; border-radius: 0; border: none; padding-top: env(safe-area-inset-top); }
+  .phone-shell { margin: 0; width: 100%; height: 100%; max-height: none; border-radius: 0; border: none; padding-top: env(safe-area-inset-top); padding-bottom: env(safe-area-inset-bottom); }
+  .phone-top { padding-top: 8px; }
 
   #journal, #modal, #hearing { padding: 0; }
   .journal-shell, .wp-shell { width: 100%; height: 100%; border-radius: 0; }
